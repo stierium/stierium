@@ -1,4 +1,6 @@
 
+use core::fmt::{self, Write};
+
 use super::io::{inb, outb};
 
 pub struct Serial
@@ -16,7 +18,7 @@ impl Serial
     const LINE_STATUS_PORT: u16 = 5;
     const LINE_ENABLE_DLAB: u8 = 0x80;
     
-    pub fn new(port: u16) -> Self {
+    pub const fn new(port: u16) -> Self {
         Self {
             port
         }
@@ -69,5 +71,12 @@ impl Serial
     }
 }
 
+impl Write for Serial
+{
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        self.puts(s);
+        Ok(())
+    }
+}
 
 

@@ -25,10 +25,9 @@ typedef struct
     uint8_t blue_mask_shift;
 } fb_t;
 
-typedef struct fbs_t fbs_t;
-typedef struct fbs_t {
-    void (*get_fb)(fbs_t *fbs, fb_t *fb, size_t idx);
-    size_t num_fbs;
+typedef struct {
+    fb_t*   fbs;
+    size_t  num_fbs;
 } fbs_t;
 
 

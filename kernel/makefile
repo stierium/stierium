@@ -12,6 +12,7 @@ CFLAGS := \
 CPPFLAGS  		:=  -I$(ROOT_DIR)/boot/ \
 					-I$(ROOT_DIR)/kernel/include \
 					-I$(ROOT_DIR)/klibc/include \
+					-I$(ROOT_DIR)/libs/ \
 					-MMD \
 					-MP
 

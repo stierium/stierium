@@ -9,6 +9,7 @@ include ../../../../make.conf
 
 CPPFLAGS    := -I./limine/ \
 			   -I$(ROOT_DIR)/boot/ \
+			   -I$(ROOT_DIR)/libs/ \
 			   -D __protocol_$(PROTOCOL)__ \
 			   -MMD \
 			   -MP

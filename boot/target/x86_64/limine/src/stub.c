@@ -5,9 +5,9 @@
 #include "fb.h"
 
 static bootctx_t bootctx;
-static void load_bootloader_ctx(void);
+static void load_bootctx(void);
 
-extern void kmain(bootctx_t *ctx);
+extern void kinit(bootctx_t *ctx);
 
 #define LIMINE_API_REVISION 4
 #include "limine.h"
@@ -106,7 +106,7 @@ static void memmap_create(memmap_t *memmap)
 
     memmap->entries = entries;
     memmap->num_entries = num_entries;
-
+    memmap->num_usable_pages = 0;
     for (size_t i = 0; i < num_entries; i++)
     {
         struct limine_memmap_entry *old = memmap_request.response->entries[i];
@@ -119,17 +119,25 @@ static void memmap_create(memmap_t *memmap)
         new->type = from_limine_memmap_type(old->type);
         new->base = old->base;
         new->len = old->length;
+
+        if (new->type == MEMMAP_USABLE)
+        {
+            memmap->num_usable_pages += new->len / 4096;
+        }
     }
 
 }
 
-static void load_bootloader_ctx(void)
+static void load_bootctx(void)
 {
     fbs_create(&bootctx.fbs);
+    memmap_create(&bootctx.memmap);
+
+    bootctx.hhdm_offset = hhdm_request.response->offset;
 }
 
 void kstart(void) 
 {
-    load_bootloader_ctx();
-    kmain(&bootctx);
+    load_bootctx();
+    kinit(&bootctx);   
 }
